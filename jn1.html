@@ -1,0 +1,142 @@
+﻿
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AugMagic</title>
+  <!-- mobile specific metas
+   ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<!-- favicons
+	================================================== -->
+       <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="description" content="AR  A-Frame">
+  <script src="aframe.js"></script>
+  <script src="camera.js"></script>
+  <!--
+  <script src="geolib.js"></script>
+  <script src="geolocation.js"></script>
+  -->
+  <style>   
+    html, body, div, a-scene {
+      background-color: transparent;
+    }
+    video, img {
+      width: 100%    !important;
+      max-width: 100%    !important;
+      height: auto   !important;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1000;
+    }
+    .coords {
+      position: absolute;
+      top: 0.1rem;
+      left: 0.1rem;
+      background-color: silver;
+      opacity: 0.5;
+      color: #fff;
+    }
+    .glow {
+      background: #527fa9;
+      box-shadow: inset 0 0 30px 15px #49628a;
+      transition: 500ms ease-in-out;
+    }
+    #new {
+      visibility: hidden;
+    }
+  </style>   
+</head>
+<body>
+  <a-scene debug id="aScene">
+    
+
+   <a-sound src="src: url(sound.mp3)" autoplay="true" loop="true" position="0 2 5"></a-sound> 
+
+    <!--
+    <a-sphere position="0 1.25 -2" radius="1.25" color="#EF2D5E"></a-sphere>
+    <a-box position="-1 0.5 0" rotation="0 45 0" width="1" height="1" depth="1"  color="#4CC3D9"></a-box>
+    <a-cylinder position="1 0.75 -1" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+    <a-plane rotation="-90 0 0" position="0 0 -2" width="4" height="4" color="#7BC8A4"></a-plane>
+    -->
+
+    <!--
+    <a-camera position="0 1.8 500"></a-camera>
+    -->
+
+    <a-assets>
+      <a-asset-item id="newly-obj" src="model.obj"></a-asset-item>
+      <a-asset-item id="newly-mtl" src="material.mtl"></a-asset-item>
+    </a-assets>
+
+    <!--
+    <a-obj-model
+      id="duck"
+      src="#ducky-obj"
+      position="0 800 -4000"
+      rotation="-210 -120 180"
+      scale="8 8 8"
+      material="color: orange">
+    </a-obj-model>
+    -->
+
+  </a-scene>
+
+  <!--
+  <canvas id="inputCanvas" width="320" height="240" style="display:none"></canvas>
+  -->
+
+  <video id="inputVideo" autoplay loop muted></video>
+
+  <!--
+  <div class="coords">
+    PLACEHOLDER
+  </div>
+  -->
+
+<script>
+
+function onReady() {
+  var vid = document.querySelector('#inputVideo');
+
+  cameraSource.start({
+    videoElement: vid,
+    constraints: {
+      video: true,
+      facingMode: "environment"
+    },
+    callback: function() {
+
+      document.querySelector('a-entity').components.position.flushToDOM();
+      // BROKEN IN CHROME ONLY
+      var htmlStr = '<a-obj-model id="new" src="#newly-obj" position="0 0 -10000" rotation="0 0 0" scale="1000 1000 1000" mtl="#newly-mtl"><a-animation easing="linear" attribute="rotation" dur="10000" to="0 360 0" repeat="indefinite"></a-animation></a-obj-model>';
+      document.querySelector('#aScene').appendChild(new DOMParser().parseFromString(htmlStr, 'text/html').body.firstChild);
+
+
+      //var htmlStr = '<a-obj-model id="duck" src="#ducky-obj" position="0 -800 -4000" rotation="-210 -120 180" scale="100 100 100" material="src="#ducky-mtl""><a-animation easing="linear" attribute="rotation" dur="10000" to="0 0 360" repeat="indefinite"></a-animation> </a-obj-model>';
+      //document.querySelector('#aScene').appendChild(new DOMParser().parseFromString(htmlStr, 'text/html').body.firstChild);
+
+      // BROKEN
+      //document.querySelector('#ducky-obj').src = 'ducky.obj'
+
+      //var scene = document.querySelector('#aScene');
+      //var aobj = document.createElement('a-obj-model');
+      //aobj.setAttribute('id', 'duck');
+      //aobj.setAttribute('src', '#ducky-obj');
+      //aobj.setAttribute('position', '0 -800 -4000');
+      //aobj.setAttribute('rotation', '210 -120 180');
+      //aobj.setAttribute('scale', '2000 2000 2000');
+      //aobj.setAttribute('material', 'color: orange');
+      //aobj.setAttribute('mtl', '#ducky-mtl');
+      //scene.appendChild(aobj);
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', onReady);
+
+
+</script>
+</body>
+</html>
+
